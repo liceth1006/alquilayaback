@@ -1,6 +1,7 @@
 package com.alquilaya.security;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 
@@ -20,12 +21,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 
+
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 	
 	
 AuthenticationManager auth;
+
+@Value("${cors.allowed-origins}")
+private String[] allowedOrigins;
 	
 private final JwtAuthFilter jwtAuthFilter;
 
@@ -68,7 +74,7 @@ public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://mi-sitio.com")); // Dominios permitidos
+        config.setAllowedOrigins(Arrays.asList(allowedOrigins));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Encabezados permitidos
         config.setExposedHeaders(Arrays.asList("Authorization")); // Encabezados expuestos al cliente
